@@ -1,0 +1,70 @@
+Function GetDocNumbers(ConfigNum As Integer) As Variant()
+'Algorithm to figure out optimal sheet size
+    If ConfigNum > 64 Then
+        GetDocNumbers = Array(0, 0, 0)
+        MsgBox "Too many configurations", vbOKOnly
+        End
+    End If
+    
+Dim tens As Integer
+Dim remainder As Integer
+Dim split As Integer
+Dim i As Integer
+Dim decimals As Double
+
+tens = (ConfigNum / 10) - 0.4
+remainder = ConfigNum Mod 10
+    If remainder > 0 Then
+        split = (remainder / tens) - 0.59
+        i = remainder Mod tens
+    End If
+        
+    If tens = 1 And remainder <= 4 Then
+        GetDocNumbers = Array(1, ConfigNum, 0)
+    ElseIf tens = 1 And remainder > 4 Then
+        GetDocNumbers = Array(2, (ConfigNum / 2) - 0.5, i)
+    ElseIf tens > 1 And i = 0 Then
+        GetDocNumbers = Array(tens, 10 + (remainder / tens), i)
+    Else
+        GetDocNumbers = Array(tens, 10 + split, i)
+    End If
+    
+Debug.Print ("GetDocNumbers Run: Success")
+End Function
+
+Function CheckUserInputFF(UserInput As Variant) As Integer
+
+Dim Reply As Integer
+
+    If UserInput = "" Then
+        Debug.Print ("User Input = Nothing")
+        Debug.Print ("Check Fail")
+        Reply = MsgBox("Input positive, whole numbers only", vbRetryCancel, "Don't Break the Macro!")
+            If Reply = 2 Then
+                Debug.Print ("User Exits")
+                Debug.Print ("*****END*****")
+                End
+            Else
+                Debug.Print ("User Input: Retry")
+                CheckUserInputFF = 0
+            End If
+    ElseIf IsNumeric(UserInput) = False Or UserInput <= 0 Then
+        Debug.Print ("User Input = Nothing")
+        Debug.Print ("Check Fail")
+        Reply = MsgBox("Input positive, whole numbers only", vbRetryCancel, "Don't Break the Macro!")
+            If Reply = 2 Then
+                Debug.Print ("User Exits")
+                Debug.Print ("*****END*****")
+                End
+            Else
+                Debug.Print ("User Input: Retry")
+                CheckUserInputFF = 0
+            End If
+    Else
+        CheckUserInputFF = UserInput
+        Debug.Print ("User Input = " & UserInput)
+        Debug.Print ("Check Pass")
+    End If
+    
+End Function
+
