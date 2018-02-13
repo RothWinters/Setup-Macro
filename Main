@@ -21,7 +21,6 @@ Dim ConfigNamesArray As Variant
 Dim ConfigName As Variant
 Dim SheetName As String
 
-Dim i, j, k, ViewSelect, ViewNum, DeleteOption As Long
 Dim retval As Boolean
 Dim boolstat As Boolean
 Dim RunCheck As Boolean
@@ -40,6 +39,7 @@ DrwgTemp = "Y:\Engineering Technical Library\03_Logistics\01_CAD Tools\01_SolidW
 Dim SheetTemp As String 'Same as above but for sheet template
 SheetTemp = "Y:\Engineering Technical Library\03_Logistics\01_CAD Tools\01_SolidWorks\07_TEMPLATES\OPER SHEET -A-.slddrt"
 
+Dim i, j, k, ViewSelect, ViewNum, DeleteOption As Long
 Debug.Print (DrwgTemp)
 Debug.Print (SheetTemp)
 
@@ -82,7 +82,7 @@ Debug.Print ("Function Return: Extra sheets: " & DocNums(2))
 Dim EdgeCheck As Integer
 EdgeCheck = MsgBox("Fix Edge Breaks?", vbYesNo)
 If EdgeCheck = 6 Then
-    EdgeBreakCheck() = True
+    boolstat = EdgeBreakCheck()
 End If
 
 Dim UIF As Boolean
@@ -209,3 +209,4 @@ Debug.Print ("****END****")
 Debug.Print ("==============")
 
 End Sub
+
