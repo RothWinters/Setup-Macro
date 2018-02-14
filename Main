@@ -1,4 +1,4 @@
-'Version 1.0 BareBones
+'Version 1.3 WhistleBones
 Option Explicit
 Dim SAVEASPATH As String
 
@@ -21,7 +21,6 @@ Dim ConfigNamesArray As Variant
 Dim ConfigName As Variant
 Dim SheetName As String
 
-Dim i, j, k, ViewSelect, ViewNum, DeleteOption As Long
 Dim retval As Boolean
 Dim boolstat As Boolean
 Dim RunCheck As Boolean
@@ -40,6 +39,7 @@ DrwgTemp = "Y:\Engineering Technical Library\03_Logistics\01_CAD Tools\01_SolidW
 Dim SheetTemp As String 'Same as above but for sheet template
 SheetTemp = "Y:\Engineering Technical Library\03_Logistics\01_CAD Tools\01_SolidWorks\07_TEMPLATES\OPER SHEET -A-.slddrt"
 
+Dim i, j, k, ViewSelect, ViewNum, DeleteOption As Long
 Debug.Print (DrwgTemp)
 Debug.Print (SheetTemp)
 
@@ -60,11 +60,57 @@ Dim ConfigNumber As Integer
 ConfigNumber = swModel.GetConfigurationCount
 
 'Get the amount of times to run the macro
+'Dim RunTest As Integer
 Dim DocNums() As Variant
+'Dim DocNumberTest As Integer
+'RunTest = 6
+
+'Do While RunTest <> 7
+'DocNumberTest = InputBox("Input Number")
+'DocNums = GetDocNumbers(DocNumberTest)
 DocNums = GetDocNumbers(ConfigNumber)
+'Debug.Print ("______________")
+'Debug.Print ("Function Input: " & DocNumberTest)
 Debug.Print ("Function Return: Document Numbers: " & DocNums(0))
 Debug.Print ("Function Return: Sheets per Document: " & DocNums(1))
 Debug.Print ("Function Return: Extra sheets: " & DocNums(2))
+'Debug.Print ("______________")
+'RunTest = MsgBox("Continue?", vbYesNo)
+'Loop
+
+'******Edge Break Check******
+Dim EdgeCheck As Integer
+EdgeCheck = MsgBox("Fix Edge Breaks?", vbYesNo)
+If EdgeCheck = 6 Then
+    boolstat = EdgeBreakCheck()
+End If
+
+Dim UIF As Boolean
+UIF = True
+Dim Numerator, Denominator As Integer
+'******Getting and Checking User Input******
+Do While UIF = True
+    Temp1 = InputBox("Enter Scale Numerator: ", "Numerator")
+    Debug.Print ("Got Numerator Input: " & Temp1)
+
+    If CheckUserInputFF(Temp1) <> 0 Then
+        Debug.Print ("Numerator Input: Check Okay")
+        Temp2 = InputBox("Enter Scale Denominator: ", "Denominator")
+        Debug.Print ("Got Denominator Input: " & Temp2)
+
+        If CheckUserInputFF(Temp2) <> 0 Then
+            Debug.Print ("Denominator Input: Check Okay")
+            Numerator = Temp1
+            Denominator = Temp2
+            UIF = False
+
+        Else
+        End If
+    Else
+    End If
+Loop
+Debug.Print ("User Input Got Gotten")
+Debug.Print ("Scale: " & Numerator & ":" & Denominator)
 
 i = 0
 For k = 1 To DocNums(0)
@@ -75,35 +121,6 @@ For k = 1 To DocNums(0)
     swModel2.SetUserPreferenceToggle swUserPreferenceToggle_e.swDisplayOrigins, False
     Dim SheetNames() As String
     ReDim SheetNames(0 To ConfigNumber - 1)
-    Dim Numerator, Denominator As Integer
-
-    Dim UIF As Boolean
-    UIF = True
-'******Getting and Checking User Input******
-        Do While UIF = True
-
-                Temp1 = InputBox("Enter Scale Numerator: ", "Numerator")
-                Debug.Print ("Got Numerator Input: " & Temp1)
-
-                If CheckUserInputFF(Temp1) <> 0 Then
-                    Debug.Print ("Numerator Input: Check Okay")
-                    Temp2 = InputBox("Enter Scale Denominator: ", "Denominator")
-                    Debug.Print ("Got Denominator Input: " & Temp2)
-
-                    If CheckUserInputFF(Temp2) <> 0 Then
-                        Debug.Print ("Denominator Input: Check Okay")
-                        Numerator = Temp1
-                        Denominator = Temp2
-                        UIF = False
-
-                    Else
-                    End If
-                Else
-                End If
-        Loop
-    Debug.Print ("User Input Got Gotten")
-    Debug.Print ("Scale: " & Numerator & ":" & Denominator)
-
 
     Dim LocX, LocY As Double
     LocX = 0.2
@@ -172,6 +189,7 @@ Debug.Print ("******Loop Start******")
                     RunCheck = True
                     Debug.Print ("RunCheck: True")
                 End If
+                Debug.Print ("Function Input: " & ConfigNumber)
                 Debug.Print ("Function Return: Document Numbers: " & DocNums(0))
                 Debug.Print ("Function Return: Sheets per Document: " & DocNums(1))
                 Debug.Print ("Function Return: Extra sheets: " & DocNums(2))
@@ -188,4 +206,7 @@ Debug.Print ("Function Return: Document Numbers: " & DocNums(0))
 Debug.Print ("Function Return: Sheets per Document: " & DocNums(1))
 Debug.Print ("Function Return: Extra sheets: " & DocNums(2))
 Debug.Print ("****END****")
+Debug.Print ("==============")
+
 End Sub
+
