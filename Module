@@ -112,3 +112,34 @@ Next i
 Debug.Print ("****EdgeBreakCheck Function End****")
 EdgeBreakCheck = True
 End Function
+
+Function NameThatSheet(ConfigName As String) As String 'Function to Check for "(" in config names
+Debug.Print ("*****NameThatSheet Start*****")
+Dim CharCheck() As String
+Dim CharNum As Integer
+Dim i As Integer
+Dim NameLength
+Dim bool As Boolean
+'Find Character Number and redim the array to match
+CharNum = Len(ConfigName)
+ReDim CharCheck(CharNum - 1)
+
+'Break the string down into an array of characters and check them for "(" then find when the ")" comes
+For i = 0 To CharNum - 1
+    CharCheck(i) = Mid$(ConfigName, i + 1, 1)
+    If CharCheck(i) = "(" Then
+        bool = True
+    ElseIf CharCheck(i) = ")" Then
+        NameLength = i + 1
+    End If
+Next i
+
+'Check to see if there is an open paren. If not then name sheet as normal
+If bool = True Then
+    NameThatSheet = Left(ConfigName, NameLength)
+Else
+    NameThatSheet = Left(ConfigName, 3)
+End If
+
+Debug.Print ("Name of Sheet: " & NameThatSheet)
+End Function
