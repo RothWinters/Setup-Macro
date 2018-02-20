@@ -17,8 +17,8 @@ Dim Response As Integer
 Dim ThirdAngle As Boolean
 
 Dim cusPropMgr As SldWorks.CustomPropertyManager
-Dim ConfigNamesArray As Variant
-Dim ConfigName As Variant
+Dim ConfigNamesArray() As String
+Dim ConfigName As String
 Dim SheetName As String
 
 Dim retval As Boolean
@@ -53,11 +53,13 @@ SAVEASPATH = Left(swModel.GetPathName(), Len(swModel.GetPathName()) - Len(swMode
 Debug.Print ("Save Path: " & SAVEASPATH)
 
 'Get Configuration names and set active configuration to raw material
+
+Dim ConfigNumber As Integer
+ConfigNumber = swModel.GetConfigurationCount
+ReDim ConfigNamesArray(ConfigNumber - 1)
 ConfigNamesArray = swModel.GetConfigurationNames
 Debug.Print ("ConfigNamesArray Size: " & UBound(ConfigNamesArray))
 swModel.ShowConfiguration2 ConfigNamesArray(0)
-Dim ConfigNumber As Integer
-ConfigNumber = swModel.GetConfigurationCount
 
 'Get the amount of times to run the macro
 'Dim RunTest As Integer
@@ -132,8 +134,9 @@ Debug.Print ("******Loop Start******")
     For j = 1 To DocNums(1) 'UBound(ConfigNamesArray) 'Limiting loop to run while configs are there
     Debug.Print ("___________" & vbCrLf & "For Loop: 'i' = " & i) 'Telling me where we are (Hopefully it gets past 0)
 
-        SheetName = Left(ConfigNamesArray(i), 3)            'Only works if configs are done as "### Operation"
+        'SheetName = Left(ConfigNamesArray(i), 3)            'Only works if configs are done as "### Operation"
         ConfigName = ConfigNamesArray(i)                    'Just getting Config Name (Might remove later)
+        SheetName = NameThatSheet(ConfigNamesArray(i))
         Debug.Print ("Config Name: " & ConfigNamesArray(i))
         Debug.Print ("Sheet Name: " & SheetName)
         SheetNames(i) = SheetName
@@ -209,4 +212,3 @@ Debug.Print ("****END****")
 Debug.Print ("==============")
 
 End Sub
-
