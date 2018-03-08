@@ -11,8 +11,6 @@ Dim swView As SldWorks.View
 Dim swSectionView As SldWorks.DrSection
 Dim swModel2 As SldWorks.ModelDoc2
 
-'Dim swModelDocExt As SldWorks.ModelDocExtension
-
 Dim Response As Integer
 Dim ThirdAngle As Boolean
 
@@ -86,6 +84,10 @@ EdgeCheck = MsgBox("Fix Edge Breaks?", vbYesNo)
 If EdgeCheck = 6 Then
     boolstat = EdgeBreakCheck()
 End If
+
+'******Rev A Check******
+Dim RevACheck As Integer
+RevACheck = MsgBox("Add Rev. A Block?", vbYesNo)
 
 Dim UIF As Boolean
 UIF = True
@@ -198,10 +200,15 @@ Debug.Print ("******Loop Start******")
                 Debug.Print ("Function Return: Extra sheets: " & DocNums(2))
                 Debug.Print ("****END****")
            End If
+           
     Debug.Print ("****Loop end****")
     i = i + 1 'Keeping the config count stored outside the loop
-    Next j 'Using this to control sheet numbers. Lets see if this baby works!
-
+    Next j 'Using this to control sheet numbers.
+    
+    If RevACheck = 6 Then
+        boolstat = RevABlockInsert()
+    End If
+    
 Next k
 
 Debug.Print ("Function Input: " & ConfigNumber)
